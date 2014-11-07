@@ -7,7 +7,10 @@ class QuitsController < ApplicationController
   def create
     @user = User.find params[:user_id]
     @quit = Quit.new quit_params
-    if @quit.save
+    if @quit.user != current_user
+      flash[:alert] = "Can't create/edit a quit for another person!"
+      redirect_to root_path
+    elsif @quit.save
       flash[:success] = 'Created!'
       redirect_to @quit.user
     else
@@ -18,11 +21,15 @@ class QuitsController < ApplicationController
   def edit
     @user = User.find params[:user_id]
     @quit = Quit.find params[:id]
+
   end
 
   def update
     @quit = Quit.find params[:id]
-    if @quit.update quit_params
+    if @quit.user != current_user
+      flash[:alert] = "Can't create/edit a quit for another person!"
+      redirect_to root_path
+    elsif @quit.update quit_params
       flash[:success] = 'Updated!'
       redirect_to @quit.user
     else
