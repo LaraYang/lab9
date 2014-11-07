@@ -5,6 +5,7 @@ class QuitsController < ApplicationController
   end
 
   def create
+    @user = User.find params[:user_id]
     @quit = Quit.new quit_params
     if @quit.save
       flash[:success] = 'Created!'
@@ -15,6 +16,7 @@ class QuitsController < ApplicationController
   end
 
   def edit
+    @user = User.find params[:user_id]
     @quit = Quit.find params[:id]
   end
 
@@ -31,6 +33,6 @@ class QuitsController < ApplicationController
   private
 
   def quit_params
-    params.require(:quit).permit(:user_id, :text)
+    params.require(:quit).permit(:text)
   end
 end
